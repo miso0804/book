@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="notice">
+  <select id="ntList" resultType="notice.dto.NoticeDTO">
+    select idx,name,email,inconveniences,content,post_date
+    from notice
+    where ${searchkey} like #{search}
+    order by idx desc
+  </select>
+  
+  <select id="ntListAll" resultType="notice.dto.NoticeDTO">
+    select idx,name,email,inconveniences,content,post_date
+    from notice
+    where name like #{search} or content like #{search}
+    order by idx desc
+  </select>
+  
+  <insert id="ntInsert">
+    insert into notice 
+    (idx, name, email, inconveniences, passwd, content) values
+    (notice_seq.nextval, #{name}, #{email}, #{inconveniences}, #{passwd}, #{content})
+  </insert>
+  
+  <select id="passwdCh" resultType="int">
+    select count(*) from notice 
+    where idx=#{idx} and passwd=#{passwd}
+  </select>
+  
+  <select id="ntDetail" parameterType="int" 
+  resultType="notice.dto.NoticeDTO">
+    select * from notice
+    where idx=#{idx}
+  </select>
+  
+  <update id="ntUpdate">
+    update NOTICE
+    set name=#{name}, email=#{email}, inconveniences=#{inconveniences},
+     passwd=#{passwd}, content=#{content}
+    where idx=#{idx}
+  </update>
+  
+  <delete id="ntDelete">
+    delete from notice
+    where idx=#{idx}
+  </delete>
+  
+  
+</mapper>
